@@ -1,0 +1,42 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: policy1
+spec:
+  podSelector:
+    matchLabels:
+      app: webserver-dev
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    - from:
+        - ipBlock:
+            cidr: 10.169.25.20/32
+        - namespaceSelector:
+            matchLabels:
+              project: jtac
+        - podSelector:
+            matchLabels:
+              app: client1-dev
+  egress:
+    - to:
+        - podSelector:
+            matchLabels:
+              app: dbserver-dev
+      ports:
+        - protocol: TCP
+          port: 80
+    - to:
+        - ipBlock:
+            cidr: 10.41.0.0/20
+      ports:
+        - protocol: TCP
+          port: 6379
+    - to:
+        - ipBlock:
+            cidr: 172.26.64.0/24
+      ports:
+        - protocol: TCP
+          port: 9092

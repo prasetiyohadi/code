@@ -1,0 +1,17 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: alpine
+  labels:
+    app: webserver-dev
+spec:
+  containers:
+    - image: alpine:3.16
+      command:
+        - /bin/sh
+        - -c
+        - sleep 60m
+      imagePullPolicy: IfNotPresent
+      name: alpine
+  restartPolicy: Always

@@ -1,0 +1,17 @@
+version: '3'
+services:
+  mysql:
+    image: bitnami/mysql:latest
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_USER=mysql
+      - MYSQL_PASSWORD=mysql
+      - MYSQL_DATABASE=moneybag
+      - MYSQL_AUTHENTICATION_PLUGIN=mysql_native_password
+    ports:
+      - 3306:3306
+    volumes:
+      - mysql-data:/bitnami/mysql/data
+
+volumes:
+  mysql-data:

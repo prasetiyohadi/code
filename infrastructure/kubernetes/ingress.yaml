@@ -1,0 +1,19 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: hello-node
+  annotations:
+    ingress.kubernetes.io/ssl-redirect: 'false'
+spec:
+  rules:
+    - host: hello-node.pras.my.id
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: hello-node
+                port:
+                  number: 8080
