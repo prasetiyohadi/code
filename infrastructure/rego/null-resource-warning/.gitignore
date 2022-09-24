@@ -1,0 +1,50 @@
+# Created by https://www.toptal.com/developers/gitignore/api/terraform
+# Edit at https://www.toptal.com/developers/gitignore?templates=terraform
+
+### Terraform ###
+# Local .terraform directories
+**/.terraform/*
+
+# Crash log files
+crash.log
+
+# Ignore override files as they are usually used to override resources locally and so
+# are not checked in
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Include override files you do wish to add to version control using negated pattern
+# !example_override.tf
+
+# Include tfplan files to ignore the plan output of command: terraform plan -out=tfplan
+# example: *tfplan*
+
+# Ignore CLI configuration files
+.terraformrc
+terraform.rc
+*.tfplan
+plan.json
+
+# End of https://www.toptal.com/developers/gitignore/api/terraform
+
+# intellij idea
+.idea/
+
+# We're ignoring the terraform lock because sometimes the hash changed
+# even though the version is the same, this caused our CI to fail and we have to
+# remove this manually
+.terraform.lock.hcl
+
+# Helm registry config
+registry.json
+
+# Ignore the .DS_Store file created by the Mac OS X Finder
+.DS_Store
+
+# Tflint
+.tflint.d
+
+# Conftest
+policy
