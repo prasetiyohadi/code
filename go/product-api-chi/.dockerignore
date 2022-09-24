@@ -1,0 +1,6 @@
+/Dockerfile
+/Dockerfile.alpine
+/helm/*
+/Makefile
+/README.md
+/simple-go-server

@@ -1,0 +1,26 @@
+run:
+  deadline: 2m
+
+linters:
+  enable:
+    - revive
+    - gofmt
+    - gosimple
+    - goimports
+    - staticcheck
+  disable:
+    - errcheck
+
+linters-settings:
+  golint:
+    min-confidence: 0.0
+
+issues:
+  exclude-rules:
+    - linters:
+        - golint
+      text: "should have a package comment"
+
+  exclude-use-default: false
+  max-same-issues: 0
+  max-issues-per-linter: 0
