@@ -1,0 +1,4 @@
+print('Hello Tiltfile')
+docker_build('pras/simple-python-server', '.')
+k8s_yaml('app.yaml')
+k8s_resource('simple-python-server', port_forwards=8080)

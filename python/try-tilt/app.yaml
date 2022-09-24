@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: simple-python-server
+  labels:
+    app: simple-python-server
+spec:
+  selector:
+    matchLabels:
+      app: simple-python-server
+  template:
+    metadata:
+      labels:
+        app: simple-python-server
+    spec:
+      containers:
+        - name: simple-python-server
+          image: pras/simple-python-server
+          ports:
+            - containerPort: 8080
