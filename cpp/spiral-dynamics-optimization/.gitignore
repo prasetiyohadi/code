@@ -1,0 +1,14 @@
+# Data files
+*.dat
+
+# Postscript files
+*.eps
+
+# Library files
+*.o
+
+# Log files
+*.log
+
+# Output files
+*.out

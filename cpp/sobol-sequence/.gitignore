@@ -1,0 +1,16 @@
+# Binary files
+sobol_prb
+test
+test2
+
+# Data files
+*.dat
+
+# Postscript files
+*.eps
+
+# Log files
+*.log
+
+# Output files
+*.out

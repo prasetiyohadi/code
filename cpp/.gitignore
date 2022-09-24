@@ -1,0 +1,30 @@
+# c/c++ binary
+a.out
+*.exe
+*.o
+
+# data file
+*.dat
+
+# log
+*.log
+
+# python bytecode
+*.py[cod]
+
+# rope
+.ropeproject/
+
+# result
+*.txt
+*.png
+*.csv
+*.mp4
+*.eps
+*.jpeg
+
+# valgrind
+vgcore.*
+
+# virtualenv
+venv/
