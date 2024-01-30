@@ -1,0 +1,84 @@
+version: "3"
+
+tasks:
+  default:
+    cmds:
+      - task: build
+  build:
+    cmds:
+      - mkdir -p bin
+      - go build -o bin/api ./cmd/api
+    sources:
+      - ./cmd/api/*.go
+    generates:
+      - bin/api
+  run:
+    cmds:
+      - go run ./cmd/api
+  clean:
+    cmds:
+      - rm bin/api
+    status:
+      - test ! -f bin/api
+  install:
+    cmds:
+      - mkdir -p bin
+      - go env -w GOBIN=$(pwd)/bin
+      - go install ./cmd/api
+      - cp bin/api $HOME/.local/bin/web-service-gin-api
+    status:
+      - test -f $HOME/.local/bin/web-service-gin-api
+  uninstall:
+    cmds:
+      - rm $HOME/.local/bin/web-service-gin-api
+    status:
+      - test ! -f $HOME/.local/bin/web-service-gin-api
+  get-albums:
+    cmds:
+      - |
+        curl http://localhost:8080/albums \
+        --include \
+        --header "Content-Type: application/json" \
+        --request "GET" \
+        && echo
+  get-albums-id:
+    cmds:
+      - |
+        curl http://localhost:8080/albums/1 \
+        --include \
+        --header "Content-Type: application/json" \
+        --request "GET" \
+        && echo
+      - |
+        curl http://localhost:8080/albums/2 \
+        --include \
+        --header "Content-Type: application/json" \
+        --request "GET" \
+        && echo
+      - |
+        curl http://localhost:8080/albums/3 \
+        --include \
+        --header "Content-Type: application/json" \
+        --request "GET" \
+        && echo
+      - |
+        curl http://localhost:8080/albums/4 \
+        --include \
+        --header "Content-Type: application/json" \
+        --request "GET" \
+        && echo
+      - |
+        curl http://localhost:8080/albums/5 \
+        --include \
+        --header "Content-Type: application/json" \
+        --request "GET" \
+        && echo
+  post-albums:
+    cmds:
+      - |
+        curl http://localhost:8080/albums \
+        --include \
+        --header "Content-Type: application/json" \
+        --request "POST" \
+        --data '{"id": "4", "title": "The Modern Sound of Betty Carter", "artist": "Betty Carter", "price": 49.99}' \
+        && echo
