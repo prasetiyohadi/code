@@ -1,0 +1,162 @@
+# Enforce a minimum Tilt version, so labels are supported
+# https://docs.tilt.dev/api.html#api.version_settings
+version_settings(constraint='>=0.22.1')
+# K8S_CONTEXT = os.getenv('GCP_K8S2_PREPROD_NAME','gke_kubernetes-preprod-0d59_asia-southeast1_k8s-preproduction-2')
+# allow_k8s_contexts(K8S_CONTEXT)
+
+
+# isOsx = str(local("uname -s", command_bat='echo "Windows"', quiet=True, echo_off=True)).strip() == 'Darwin'
+# def safeSedReplace(key, val):
+#     """"""
+#     if isOsx: # BSD sed syntax
+#         return "sed -i '' \"s/%s=.*$/%s=%s/g\"" % (key, key, val)
+#     else:     # GNU sed syntax
+#         return "sed -i \"s/%s=.*$/%s=%s/g\"" % (key, key, val)
+
+
+# if config.tilt_subcommand == 'up':
+#     """
+#     On `tilt up`:
+#         - if `.env` doesn't exist, create it
+#         - Import relevant secrets from k8s secret file for the service
+#     """
+#     if not os.path.exists('.env'):
+#         print("Creating .env file")
+#         local(
+#             'cp env.sample .env',
+#             echo_off=True
+#             )
+#     external_resources = read_yaml('./dev/external_resources.yml')
+#     for secret in external_resources["secrets"]:
+#         secret_cache = decode_json(local(
+#             "kubectl -n %s get secret %s -o jsonpath='{.data}' --context %s" % (secret["namespace"], secret["secret_name"], K8S_CONTEXT),
+#             quiet=True
+#         ))
+#
+#         for key in secret["keys"]:
+#             pw = local(
+#                 "base64 --decode",
+#                 quiet=True,
+#                 echo_off=True,
+#                 stdin=secret_cache[key]
+#                 )
+#             # The `grep` is needed to avoid `sed`ing the file every time causing Tilt to infinite reload
+#             local(
+#                 "grep '%s=%s' .env || %s .env" % (key, pw, safeSedReplace(key, pw)),
+#                 quiet=True
+#             )
+
+COMPOSE_FILE = './docker-compose.yaml'
+project_name = os.path.basename(os.getcwd())
+docker_compose(COMPOSE_FILE, project_name=project_name)
+
+# Delete old images so it won't fill up your disk
+docker_prune_settings(max_age_mins=10, num_builds=2)
+
+def app_exec(env = ''):
+    """
+    Helper function to get docker exec call for `app` container with optional env.
+    """
+
+    return "docker-compose --project-name {project_name} -f {compose_file} exec{args} -T app".format(
+        args=" -e RAILS_ENV="+ env if env else '',
+        project_name=project_name,
+        compose_file=COMPOSE_FILE
+    )
+
+docker_build(
+    # Image name - must match the image in the docker-compose file
+    'app',
+    # Docker context
+    '.',
+    dockerfile='./dev/Dockerfile',
+    ssh='default',
+    only=['Gemfile', 'Gemfile.lock'],
+    live_update = [
+        # NOT syncing local files into the container to not rebuild every time, will mount instead
+        # sync('.', '/var/www/app'),
+        # Re-run bundle install whenever Gemfile changes.
+        run('bundle install', trigger=['Gemfile', 'Gemfile.lock']),
+        # Restart the process to pick up the changed files.
+        restart_container()
+    ]
+)
+
+# TODO: Build container image for language server
+# docker_build(
+#     # Image name - must match the image in the docker-compose file
+#     'solargraph',
+#     # Docker context
+#     '.',
+#     dockerfile='./dev/Dockerfile-solargraph',
+#     ssh='default',
+#     only=['Gemfile', 'Gemfile.lock']
+# )
+
+# Add labels to Docker services
+# dc_resource('db', labels=["database"])
+# dc_resource('app', labels=["deployments"])
+# dc_resource('kafka-consumer', labels=["deployments"])
+
+# TODO: run linter using local_resource()
+# local_resource(
+#     'Run linter',
+#     cmd=app_exec() + ' bundle exec rake rubocop',
+#     labels=['actions'],
+#     allow_parallel=True,
+#     trigger_mode=TRIGGER_MODE_MANUAL,
+#     auto_init=False
+# )
+
+# TODO: run test using local_resource()
+# local_resource(
+#     'Run tests',
+#     cmd=app_exec('test')+' bundle exec rspec spec --force-color',
+#     labels=['actions'],
+#     allow_parallel=True,
+#     trigger_mode=TRIGGER_MODE_MANUAL,
+#     auto_init=False
+# )
+
+# TODO: tail application logs
+# local_resource(
+#     'Server logs',
+#     serve_cmd= (
+#         app_exec() + " tail -f log/*"
+#     ),
+#     labels=['deployments'],
+#     auto_init=True
+# )
+
+# TODO: run databasae schema migration
+# local_resource(
+#     'DB migrate',
+#     cmd= (
+#         app_exec() + " bundle exec rake db:migrate"
+#     ),
+#     labels=['database'],
+#     trigger_mode=TRIGGER_MODE_MANUAL,
+#     auto_init=False
+# )
+
+# TODO: run database schema rollback
+# local_resource(
+#     'DB rollback',
+#     cmd= (
+#         app_exec() + " bundle exec rake db:rollback"
+#     ),
+#     labels=['database'],
+#     trigger_mode=TRIGGER_MODE_MANUAL,
+#     auto_init=False
+# )
+
+# TODO: seed database data
+# local_resource(
+#     'DB seed',
+#     cmd= (
+#         app_exec() + " bundle exec rails r script/samples/dummy.rb"
+#     ),
+#     labels=['database'],
+#     trigger_mode=TRIGGER_MODE_MANUAL,
+#     auto_init=False
+# )

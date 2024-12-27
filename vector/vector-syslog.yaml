@@ -1,0 +1,34 @@
+sources:
+  generate_syslog:
+    type:   "demo_logs"
+    format: "syslog"
+    count:  100
+
+transforms:
+  remap_syslog:
+    inputs:
+      - "generate_syslog"
+    type:   "remap"
+    source: |
+            structured = parse_syslog!(.message)
+            . = merge(., structured)
+  drop_metrics:
+    inputs: [remap_syslog]
+    type: filter
+    condition: |
+      match_any(string!(.facility), [r'^local', r'^syslog'])
+  snake_case:
+    inputs: [drop_metrics]
+    type: "remap"
+    source: |
+            hostname = replace!(.hostname, ".", "_")
+            .hostname = screamingsnakecase(hostname)
+
+sinks:
+  emit_syslog:
+    inputs:
+      # - "remap_syslog"
+      - "snake_case"
+    type: "console"
+    encoding:
+      codec: "json"
