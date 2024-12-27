@@ -1,0 +1,14 @@
+---
+policies:
+  - name: my-first-policy
+    description: |
+      Adds a tag to a virtual machines
+    resource: azure.vm
+    filters:
+      - type: value
+        key: tags.stack
+        value: service-example
+    actions:
+      - type: tag
+        tag: foo
+        value: bar

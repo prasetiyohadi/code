@@ -1,0 +1,22 @@
+version: "3"
+
+tasks:
+  default:
+    cmds:
+      - task: build
+  build:
+    cmds:
+      - mkdir -p bin
+      - go build -o bin/generics .
+    sources:
+      - ./*.go
+    generates:
+      - bin/generics
+  run:
+    cmds:
+      - go run ./
+  clean:
+    cmds:
+      - rm bin/generics
+    status:
+      - test ! -f bin/generics

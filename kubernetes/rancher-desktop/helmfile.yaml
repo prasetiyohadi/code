@@ -1,0 +1,25 @@
+---
+repositories:
+  - name: ingress-nginx
+    url: https://kubernetes.github.io/ingress-nginx
+  # - name: prometheus-community
+  #   url: https://prometheus-community.github.io/helm-charts
+  # - name: hashicorp
+  #   url: https://helm.releases.hashicorp.com
+  # - name: c7n
+  #   url: https://cloud-custodian.github.io/helm-charts
+releases:
+  - name: ingress-nginx
+    namespace: ingress-nginx
+    chart: ingress-nginx/ingress-nginx
+  # - name: prometheus
+  #   namespace: prometheus
+  #   chart: prometheus-community/prometheus
+  #   values:
+  #     - ./opencost/prometheus-extraScrapeConfigs.yaml
+  # - name: consul
+  #   namespace: consul
+  #   chart: hashicorp/consul
+  # - name: vault
+  #   namespace: vault
+  #   chart: hashicorp/vault

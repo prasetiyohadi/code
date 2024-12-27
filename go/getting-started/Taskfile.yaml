@@ -1,0 +1,35 @@
+version: "3"
+
+tasks:
+  default:
+    cmds:
+      - task: build
+  build:
+    cmds:
+      - mkdir -p bin
+      - go build -o bin/hello ./cmd/hello
+    sources:
+      - ./cmd/hello/*.go
+    generates:
+      - bin/hello
+  run:
+    deps:
+      - build
+    cmds:
+      - ./bin/hello
+  clean:
+    cmds:
+      - rm bin/hello
+    status:
+      - test ! -f bin/hello
+  install:
+    cmds:
+      - go env -w GOBIN=$HOME/.local/bin
+      - go install ./cmd/hello
+    status:
+      - test -f $HOME/.local/bin/hello
+  uninstall:
+    cmds:
+      - rm $HOME/.local/bin/hello
+    status:
+      - test ! -f $HOME/.local/bin/hello
