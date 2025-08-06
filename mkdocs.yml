@@ -1,0 +1,65 @@
+site_name: My Code Docs
+nav:
+  - Home: index.md
+copyright: Copyright &copy; <a href="https://github.com/prasetiyohadi">Prasetiyo Hadi Purwoko</a>
+site_author: me@pras.my.id (Prasetiyo Hadi Purwoko)
+site_description: >-
+  System administrator and Linux enthusiast, with topics from ongoing twelve years of experience in the IT industry.
+strict: false
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/prasetiyohadi
+    - icon: fontawesome/brands/linkedin
+      link: https://www.linkedin.com/in/prasetiyohadi
+    - icon: material/email
+      link: mailto:me@pras.my.id
+      name: Email
+plugins:
+  - search
+  - include_dir_to_nav
+markdown_extensions:
+  # Python Markdown
+  - attr_list
+  - toc:
+      permalink: true
+  # Python Markdown Extensions
+  - pymdownx.highlight
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  # - pymdownx.snippets:
+  #     base_path: !relative $docs_dir
+  #     check_paths: true
+  - pymdownx.superfences
+  - pymdownx.tasklist:
+      custom_checkbox: true
+theme:
+  language: en
+  name: material
+  features:
+    - announce.dismiss
+    - header.autohide
+    - navigation.expand
+    - navigation.footer
+    - navigation.indexes
+    - navigation.instant
+    - navigation.instant.progress
+    - navigation.prune
+    - navigation.sections
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.top
+    - navigation.tracking
+    - search.highlight
+    - search.share
+    - search.suggest
+    - toc.follow
+  icon:
+    next: fontawesome/solid/angle-right
+    previous: fontawesome/solid/angle-left
+    repo: fontawesome/brands/github
+exclude_docs: |
+  /blog.md
+  /markdown.md
+  /web-apps.md
